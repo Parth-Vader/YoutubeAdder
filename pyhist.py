@@ -19,7 +19,13 @@ def Main():
 	try:
 		c.execute("SELECT url FROM urls WHERE url LIKE 'https://www.youtube.com/watch?v=%' ORDER BY last_visit_time;")
 		all_rows = c.fetchall()
-		print(all_rows)
+		c.executescript("""ATTACH DATABASE 'test.db' AS other;
+                        INSERT INTO other.urls
+                        SELECT url 
+                        FROM urls
+                        WHERE url 
+                        LIKE 'https://www.youtube.com/watch?v=%' 
+                        ORDER BY last_visit_time;""")
 	
 	except sqlite3.OperationalError:
 		shutil.copyfile(data_base,new_location)
@@ -27,7 +33,14 @@ def Main():
 		c = conn.cursor()
 		c.execute("SELECT url FROM urls WHERE url LIKE 'https://www.youtube.com/watch?v=%' ORDER BY last_visit_time;")
 		all_rows = c.fetchall()
-		print(all_rows)
+		c.executescript("""ATTACH DATABASE 'test.db' AS other;
+                        INSERT INTO other.urls
+                        SELECT url 
+                        FROM urls
+                        WHERE url 
+                        LIKE 'https://www.youtube.com/watch?v=%' 
+                        ORDER BY last_visit_time;""")
+
 		os.remove("temp.db")
 
 if __name__ == '__main__':
