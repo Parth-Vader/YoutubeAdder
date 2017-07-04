@@ -13,7 +13,6 @@ def Find_path():
 def Main():
 	data_base, new_location = Find_path()
 	
-	shutil.copyfile(data_base,new_location)
 	conn = sqlite3.connect(data_base)
 	c = conn.cursor()
 
@@ -23,6 +22,7 @@ def Main():
 		print(all_rows)
 	
 	except sqlite3.OperationalError:
+		shutil.copyfile(data_base,new_location)
 		conn = sqlite3.connect(new_location)
 		c = conn.cursor()
 		c.execute("SELECT url FROM urls WHERE url LIKE 'https://www.youtube.com/watch?v=%' ORDER BY last_visit_time;")
